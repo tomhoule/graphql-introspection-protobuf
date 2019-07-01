@@ -4,14 +4,17 @@ package graphql_introspection;
 
 import "directive_location.proto";
 
+// A full response to the introspection query will have a "data" key at the top level.
 message DataContainer {
     SchemaContainer data = 1;
 }
 
+// A full response to the introspection query will have a "__schema" key right under "data".
 message SchemaContainer {
     __Schema __schema = 1;
 }
 
+// The top-level type for the introspected GraphQL schema.
 message __Schema {
     repeated __Type types = 1;
     __Type query_type = 2;
