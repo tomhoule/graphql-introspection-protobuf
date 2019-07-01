@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package graphql_introspection;
+
+import "directive_location.proto";
+
+message DataContainer {
+    SchemaContainer data = 1;
+}
+
+message SchemaContainer {
+    __Schema __schema = 1;
+}
+
+message __Schema {
+    repeated __Type types = 1;
+    __Type query_type = 2;
+    __Type mutation_type = 3;
+    __Type subscription_type = 4;
+    repeated __Directive directives = 5;
+}
+
+message __Type {
+    __TypeKind kind = 1;
+    string name = 2;
+    string description = 3;
+
+    // OBJECT and INTERFACE only.
+    repeated __Field fields = 4;
+
+    // OBJECT only.
+    repeated __Type interfaces = 5;
+
+    // INTERFACE and UNION only.
+    repeated __Type possible_types = 6;
+
+    // ENUM only.
+    repeated __EnumValue enum_values = 7;
+
+    // INPUT_OBJECT only.
+    repeated __InputValue input_fields = 8;
+
+    // NON_NULL and LIST only.
+    __Type of_type = 9;
+}
+
+message __Directive {
+    string name = 1;
+    string description = 2;
+    repeated directive_location.__DirectiveLocation locations = 3;
+    repeated __InputValue args = 4;
+}
+
+enum __TypeKind {
+    UNSPECIFIED = 0;
+    SCALAR = 1;
+    OBJECT = 2;
+    INTERFACE = 3;
+    UNION = 4;
+    ENUM = 5;
+    INPUT_OBJECT = 6;
+    LIST = 7;
+    NON_NULL = 8;
+}
+
+message __InputValue {
+    string name = 1;
+    string description = 2;
+    __Type type = 3;
+    string defaultValue = 4;
+}
+
+message __Field {
+    string name = 1;
+    string description = 2;
+    repeated __InputValue args = 3;
+    __Type type = 4;
+    bool is_deprecated = 5;
+    string deprecation_reason = 6;
+}
+
+message __EnumValue {
+    string name = 1;
+    string description = 2;
+    bool is_deprecated = 3;
+    string deprecation_reason = 4;
+}
